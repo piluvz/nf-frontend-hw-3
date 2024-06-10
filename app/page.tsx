@@ -1,10 +1,13 @@
 'use client'
 import Posts from './post/posts';
+import { AuthProvider } from './context/AuthContext';
 
 export default function Home() {
   return (
-    <div>
-      <Posts />
-    </div>
+    <AuthProvider>
+      <div>
+        <Posts />
+      </div>
+    </AuthProvider>
   );
 }
