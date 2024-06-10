@@ -3,22 +3,20 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../context/AuthContext';
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const {login, token} = useAuth()
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://dummyjson.com/auth/login', { username, password });
-      const authToken = response.data.token;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('authToken', authToken);
-      }
-      router.push('/');
+      await login(username, password);
     } catch (error) {
       console.error('Login error:', error);
       setError('Invalid username or password.');

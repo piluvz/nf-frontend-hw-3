@@ -20,6 +20,7 @@ type Post = {
 
 export default function Posts() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -28,11 +29,21 @@ export default function Posts() {
         setPosts(posts);
       } catch (err) {
         console.error('Error while fetching posts:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadPosts();
   }, []);
+
+  if(loading){
+    return (
+      <main className="flex flex-col min-h-screen bg-white p-14 pt-10">
+        <h1 className="text-2xl font-bold mb-10">Loading...</h1>
+      </main>
+    );
+  }
 
   return (
     <main className="flex flex-col min-h-screen bg-white p-14 pt-10">

@@ -1,10 +1,12 @@
+
 'use client'; 
- 
 import React, { createContext, useState, useContext, ReactNode } from 'react'; 
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
  
 interface AuthContextType { 
   token: string | null; 
-  login: (token: string) => void; 
+  login: (username:string, password:string) => void; 
   logout: () => void; 
 } 
  
@@ -12,9 +14,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
  
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => { 
   const [token, setToken] = useState<string | null>(null); 
- 
-  const login = (token: string) => { 
+  const router = useRouter();
+
+  const login = async (username: string, password: string) => { 
+    const response = await axios.post('https://dummyjson.com/auth/login', { username, password });
+    const {token} = response.data
     setToken(token); 
+    router.push('/')
   }; 
  
   const logout = () => { 
